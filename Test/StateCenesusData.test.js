@@ -1,5 +1,4 @@
 const assert = require("chai").assert;
-
 const censusAnalyser = require("../Src/StateCensusData");
 const STATE_CENSUS_FILE_PATH = './resources/StateCensusData.csv';
 const STATE_CODE_FILE_PATH = './resources/StateCode.csv';
@@ -18,7 +17,7 @@ describe("IndiaStateCensusAnalyser", () => {
       assert.notEqual(row, 39);
     });
   });
-});
+ });
 
 describe("IndiaStateCodeAnalyser", () => {
   it("Loads the number of records 37 from csv file", () => {
