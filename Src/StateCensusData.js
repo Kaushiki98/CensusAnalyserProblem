@@ -1,28 +1,40 @@
-const csvtoJson = require('csvtojson');
 const fs = require('fs');
 const csv = require('csv-parser');
-var array = [];
+var stateArray = [];
 
 class CensusAnalyser {
+
+  csvToJsonConversion(path, callback) {
+    var promise = new Promise(function (resolve, reject) {
+      csvtoJson()
+        .fromFile(path)
+      resolve("Converted successfully");
+      reject("Conversion rejected");
+    });
+    promise.
+      then(function () {
+        return callback(data);
+      }).
+      catch(function () {
+        console.log("Error encountered");
+      });
+  }
+
   loadCsvData(path, callback) {
+    let count = 0;
     fs.createReadStream(path)
       .pipe(csv())
       .on(("data"), (row) => {
-        array.push(row);
-        console.log("data : "+JSON.stringify(row))
+        count += 1;
+      })
+      .on(("data"), (row) => {
+        stateArray.push(row);
+        //      console.log("data : "+JSON.stringify(row))
       })
       .on("end", () => {
-        callback(array.length)
-        console.log('CSV file successfully processed');
+        console.log("Number of records: " + count);
+        return callback(count);
       });
-  } 
-  csvToJsonConversion(path, callback) {
-    fs.createReadStream(path)
-    .pipe(csv())
-    .on('end',() => {
-      callback(path)
-    })
   }
 }
-
 module.exports = CensusAnalyser;
