@@ -17,6 +17,13 @@ describe("IndiaStateCensusAnalyser", () => {
       assert.notEqual(row, 39);
     });
   });
+
+  it("givenIndiaCensusData_WhenSortedOnState_ShouldReturnSortedData", () => {
+    CensusAnalyser.sortByState(STATE_CENSUS_FILE_PATH, (sorted) => {
+      assert.equal(sorted, "Andhra Pradesh");
+    });
+  });
+
  });
 
 describe("IndiaStateCodeAnalyser", () => {
@@ -27,7 +34,7 @@ describe("IndiaStateCodeAnalyser", () => {
   });
 
   it("Given wrong INDIA_STATE_CODE_FILE_PATH", () => {
-    CensusAnalyser.loadCsvData(STATE_CENSUS_FILE_PATH, (row) => {
+    CensusAnalyser.loadCsvData(STATE_CODE_FILE_PATH, (row) => {
       assert.notEqual(row, 30);
     });
   });
