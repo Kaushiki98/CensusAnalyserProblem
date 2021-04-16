@@ -30,7 +30,7 @@ class CensusAnalyser {
         callback(stateArray[1].State)
       })
     });
-
   }
+
 }
 module.exports = CensusAnalyser;
