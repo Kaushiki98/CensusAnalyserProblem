@@ -82,4 +82,10 @@ describe("USCensusAnalyser", () => {
       assert.equal(population, "District of Columbia");
     });
   });
+
+  it("givenUSCensusData_WhenSortedOnArea_ShouldReturnEqual", () => {
+    CensusAnalyser.sortByArea(US_CENSUS_FILE_PATH, (area) => {
+      assert.equal(area, "Alaska");
+    });
+  });
 });

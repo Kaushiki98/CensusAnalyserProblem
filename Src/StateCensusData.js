@@ -128,7 +128,7 @@ class CensusAnalyser {
         * @returns callback with the data in an array in JSON format
         */
   sortByArea(path, callback) {
-    this.loadCsvData(path, (data) => {
+    this.loadCsvData(path, () => {
       csvtojson().fromFile(path).then(stateArray => {
         var area = stateArray.sort((a, b) => a.AreaInSqKm - b.AreaInSqKm);
         return callback(area);
