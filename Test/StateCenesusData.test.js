@@ -57,17 +57,29 @@ describe("IndiaStateCodeAnalyser", () => {
     });
   });
 
-  it("GivenIndiaStateCodeFile_WhenSortedByStateCode_ShouldReturnEqual", function () {
-    CensusAnalyser.sortByStateCode(STATE_CODE_FILE_PATH, function (data) {
+  it("GivenIndiaStateCodeFile_WhenSortedByStateCode_ShouldReturnEqual", () => {
+    CensusAnalyser.sortByStateCode(STATE_CODE_FILE_PATH, () => {
       assert.equal(data, "AN");
     });
   });
 });
 
-describe("USCensusAnalyser", function () {
-  it("GivenUSCensusData_whenLoadsTheNumberOfRecords_ShouldReturnTrue", function () {
-      CensusAnalyser.loadCsvData(US_CENSUS_FILE_PATH, function (count) {
-          assert.equal(count, 51);
-      });
+describe("USCensusAnalyser", () => {
+  it("GivenUSCensusData_whenLoadsTheNumberOfRecords_ShouldReturnTrue", () => {
+    CensusAnalyser.loadCsvData(US_CENSUS_FILE_PATH, (row) => {
+      assert.equal(row, 51);
+    });
+  });
+
+  it("givenUSCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
+    CensusAnalyser.sortByPopulation(US_CENSUS_FILE_PATH, (population) => {
+      assert.equal(population, "California");
+    });
+  });
+
+  it("givenUSCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
+    CensusAnalyser.sortByPopulationDensity(US_CENSUS_FILE_PATH, (population) => {
+      assert.equal(population, "District of Columbia");
+    });
   });
 });
