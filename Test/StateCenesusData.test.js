@@ -63,3 +63,11 @@ describe("IndiaStateCodeAnalyser", () => {
     });
   });
 });
+
+describe("USCensusAnalyser", function () {
+  it("GivenUSCensusData_whenLoadsTheNumberOfRecords_ShouldReturnTrue", function () {
+      CensusAnalyser.loadCsvData(US_CENSUS_FILE_PATH, function (count) {
+          assert.equal(count, 51);
+      });
+  });
+});
