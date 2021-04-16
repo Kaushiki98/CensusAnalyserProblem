@@ -4,20 +4,13 @@ const csv = require('csv-parser');
 var stateArray = [];
 
 class CensusAnalyser {
-
-  // csvToJsonConversion(path) {
-  //   return new Promise(function () {
-  //     csvtoJson().fromFile(path)
-  //   });
-  // }
-
   loadCsvData(path, callback) {
     let count = 0;
     fs.createReadStream(path)
       .pipe(csv())
       .on(("data"), () => {
         count += 1;
-    })
+      })
       .on(("data"), (row) => {
         stateArray.push(row);
       })
@@ -27,16 +20,17 @@ class CensusAnalyser {
   }
 
   sortByState(path, callback) {
-    csvtojson()
-    .fromFile(path)
-    .then((stateArray) => {
-        let sorted = stateArray.sort((a , b) => {
-          a.State.localeCompare(b.State)
-        console.log("sorted: "+ sorted)
-        return callback(sorted);
-        });
+    this.loadCsvData(path, function () {
+      csvtojson().fromFile(path).then(stateArray => {
+        stateArray.sort((a, b) => {
+          let x = a.State.toLowerCase();
+          let y = b.State.toLowerCase();
+          if (x < y) { return -1; }
+        })
+        callback(stateArray[1].State)
+      })
     });
-    }
 
+  }
 }
 module.exports = CensusAnalyser;
