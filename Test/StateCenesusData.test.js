@@ -25,10 +25,15 @@ describe("IndiaStateCensusAnalyser", () => {
   });
 
   it("GivenIndiaCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
-    CensusAnalyser.sortByPopulation(STATE_CENSUS_FILE_PATH, (data) => {
-      assert.equal(data, "Uttar Pradesh");
+    CensusAnalyser.sortByPopulation(STATE_CENSUS_FILE_PATH, (population) => {
+      assert.equal(population, "Uttar Pradesh");
     });
   });
+  it("givenIndiaCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", function () {
+    CensusAnalyser.sortByPopulationDensity(STATE_CENSUS_FILE_PATH, function (populationDensity) {
+        assert.equal(populationDensity, "Uttar Pradesh");
+    });
+});
 });
 
 describe("IndiaStateCodeAnalyser", () => {

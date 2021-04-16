@@ -66,6 +66,7 @@ class CensusAnalyser {
         return callback(count);
       });
   }
+
   /**
       * Take data array and a field and sort state data 
       * @returns callback with the data in an array in JSON format
@@ -79,9 +80,10 @@ class CensusAnalyser {
           if (x < y) { return -1; }
         })
         callback(stateArray[1].State)
-      })
+      });
     });
   }
+
   /**
       * Take data array and a field to sort by statecode  
       * @returns callback with the data in an array in JSON format
@@ -89,11 +91,12 @@ class CensusAnalyser {
   sortByStateCode(path, callback) {
     this.loadCsvData(path, () => {
       csvtojson().fromFile(path).then(stateArray => {
-        stateArray.sort((a, b) => a.StateCode - b.StateCode)
-        return callback(stateArray);
+        var stateCode = stateArray.sort((a, b) => a.StateCode - b.StateCode)
+        return callback(stateCode);
       });
-    })
+    });
   }
+
   /**
       * Take data array and a field to sort by Population
       * @returns callback with the data in an array in JSON format
@@ -101,10 +104,23 @@ class CensusAnalyser {
   sortByPopulation(path, callback) {
     this.loadCsvData(path, () => {
       csvtojson().fromFile(path).then(stateArray => {
-        stateArray.sort((a, b) => a.Population - b.Population);
-        return callback(data);
+        var population = stateArray.sort((a, b) => a.Population - b.Population);
+        return callback(population);
       });
-    })
+    });
+  }
+
+  /**
+        * Take data array and a field to sort by Population
+        * @returns callback with the data in an array in JSON format
+        */
+  sortByPopulationDensity(path, callback) {
+    this.loadCsvData(path, () => {
+      csvtojson().fromFile(path).then(stateArray => {
+        var populationDensity = stateArray.sort((a, b) => a.Population - b.Population);
+        return callback(populationDensity);
+      });
+    });
   }
 }
 
