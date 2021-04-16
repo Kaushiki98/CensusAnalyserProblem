@@ -2,6 +2,7 @@ const assert = require("chai").assert;
 const censusAnalyser = require("../Src/StateCensusData");
 const STATE_CENSUS_FILE_PATH = './resources/StateCensusData.csv';
 const STATE_CODE_FILE_PATH = './resources/StateCode.csv';
+const US_CENSUS_FILE_PATH = "./resources/USCensusData.csv";
 
 var CensusAnalyser = new censusAnalyser();
 
@@ -29,11 +30,18 @@ describe("IndiaStateCensusAnalyser", () => {
       assert.equal(population, "Uttar Pradesh");
     });
   });
-  it("givenIndiaCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", function () {
-    CensusAnalyser.sortByPopulationDensity(STATE_CENSUS_FILE_PATH, function (populationDensity) {
-        assert.equal(populationDensity, "Uttar Pradesh");
+
+  it("GivenIndiaCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
+    CensusAnalyser.sortByPopulationDensity(STATE_CENSUS_FILE_PATH, (populationDensity) => {
+      assert.equal(populationDensity, "Uttar Pradesh");
     });
-});
+  });
+
+  it("GivenIndiaCensusData_WhenSortedOnArea_ShouldReturnSortedData", () => {
+    CensusAnalyser.sortByArea(STATE_CENSUS_FILE_PATH, (data) => {
+      assert.equal(data, "Rajasthan");
+    });
+  });
 });
 
 describe("IndiaStateCodeAnalyser", () => {

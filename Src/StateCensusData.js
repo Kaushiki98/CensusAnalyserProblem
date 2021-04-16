@@ -111,7 +111,7 @@ class CensusAnalyser {
   }
 
   /**
-        * Take data array and a field to sort by Population
+        * Take data array and a field to sort by Population Density
         * @returns callback with the data in an array in JSON format
         */
   sortByPopulationDensity(path, callback) {
@@ -119,6 +119,19 @@ class CensusAnalyser {
       csvtojson().fromFile(path).then(stateArray => {
         var populationDensity = stateArray.sort((a, b) => a.Population - b.Population);
         return callback(populationDensity);
+      });
+    });
+  }
+
+  /**
+        * Take data array and a field to sort by area
+        * @returns callback with the data in an array in JSON format
+        */
+  sortByArea(path, callback) {
+    this.loadCsvData(path, (data) => {
+      csvtojson().fromFile(path).then(stateArray => {
+        var area = stateArray.sort((a, b) => a.AreaInSqKm - b.AreaInSqKm);
+        return callback(area);
       });
     });
   }
