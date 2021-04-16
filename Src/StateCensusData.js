@@ -30,7 +30,14 @@ class CensusAnalyser {
         callback(stateArray[1].State)
       })
     });
-
   }
+  sortByStateCode(path, callback) {
+    this.loadCsvData(path, function (data) {
+    csvtojson().fromFile(path).then(stateArray => {
+    stateArray.sort((a, b) => a.StateCode - b.StateCode)
+    return callback(stateArray);
+    }); 
+  })
+}
 }
 module.exports = CensusAnalyser;

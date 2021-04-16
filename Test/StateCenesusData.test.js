@@ -23,7 +23,7 @@ describe("IndiaStateCensusAnalyser", () => {
       assert.equal(sorted, "Andhra Pradesh");
     });
   });
-  
+
 });
 
 describe("IndiaStateCodeAnalyser", () => {
@@ -36,6 +36,11 @@ describe("IndiaStateCodeAnalyser", () => {
   it("Given wrong INDIA_STATE_CODE_FILE", () => {
     CensusAnalyser.loadCsvData(STATE_CODE_FILE_PATH, (row) => {
       assert.notEqual(row, 30);
+    });
+  });
+  it("givenIndiaStateCodeFile_WhenSortedByStateCode_ShouldReturnEqual", function () {
+    CensusAnalyser.sortByStateCode(STATE_CODE_FILE_PATH, function (data) {
+      assert.equal(data, "AN");
     });
   });
 });
