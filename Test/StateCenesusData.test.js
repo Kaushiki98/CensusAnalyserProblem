@@ -6,46 +6,45 @@ const STATE_CODE_FILE_PATH = './resources/StateCode.csv';
 var CensusAnalyser = new censusAnalyser();
 
 describe("IndiaStateCensusAnalyser", () => {
-  it("Loads the number of records 29 from csv file", () => {
+  it("GivenIndianCensusData_whenLoadsTheNumberOfRecords_ShouldReturnTrue", () => {
     CensusAnalyser.loadCsvData(STATE_CENSUS_FILE_PATH, (row) => {
       assert.equal(row, 29);
     });
   });
 
-  it("Given wrong INDIA_STATE_CENSUS_FILE_PATH", () => {
+  it("GivenIndianCensusData_WhenWrongDataGiven_ShouldReturnFalse", () => {
     CensusAnalyser.loadCsvData(STATE_CENSUS_FILE_PATH, (row) => {
       assert.notEqual(row, 39);
     });
   });
 
-  it("givenIndiaCensusData_WhenSortedOnState_ShouldReturnSortedData", () => {
+  it("GivenIndiaCensusData_WhenSortedOnState_ShouldReturnSortedData", () => {
     CensusAnalyser.sortByState(STATE_CENSUS_FILE_PATH, (sorted) => {
       assert.equal(sorted, "Andhra Pradesh");
     });
   });
 
+  it("GivenIndiaCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
+    CensusAnalyser.sortByPopulation(STATE_CENSUS_FILE_PATH, (data) => {
+      assert.equal(data, "Uttar Pradesh");
+    });
+  });
 });
 
 describe("IndiaStateCodeAnalyser", () => {
-  it("Loads the number of records 37 from csv file", () => {
+  it("GivenIndianStateCode_whenLoadsTheNumberOfRecords_ShouldReturnTrue", () => {
     CensusAnalyser.loadCsvData(STATE_CODE_FILE_PATH, (row) => {
       assert.equal(row, 37);
     });
   });
 
-  it("Given wrong INDIA_STATE_CODE_FILE", () => {
+  it("GivenIndianStateCode_WhenWrongDataGiven_ShouldReturnFalse", () => {
     CensusAnalyser.loadCsvData(STATE_CODE_FILE_PATH, (row) => {
       assert.notEqual(row, 30);
     });
   });
 
-  it("givenIndiaStateCodeFile_WhenSortedByStateCode_ShouldReturnEqual", () => {
-    CensusAnalyser.sortOrderByStateCode(STATE_CODE_FILE_PATH, (sorted) => {
-        assert.equal(sorted, "AD");
-    });
-});
-
-  it("givenIndiaStateCodeFile_WhenSortedByStateCode_ShouldReturnEqual", function () {
+  it("GivenIndiaStateCodeFile_WhenSortedByStateCode_ShouldReturnEqual", function () {
     CensusAnalyser.sortByStateCode(STATE_CODE_FILE_PATH, function (data) {
       assert.equal(data, "AN");
     });
