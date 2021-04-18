@@ -19,121 +19,78 @@
  * **********************************************************/
 
 /**
-  * @description constant variable is declared to convert csv to json
-  * @const csvtojson
-*/
-const csvtojson = require('csvtojson');
-
-/**
-  * @description constant variable is declared to store fs module
-  * @const fs
-  */
+ * @description constant variable is declared to store fs module
+ * @const fs
+ */
 const fs = require('fs');
 
 /**
-  * @description constant variable is declared to store csv-parse module
-  * @const csv
-*/
+ * @description constant variable is declared to store csv-parse module
+ * @const csv
+ */
 const csv = require('csv-parser');
+const { resolve } = require('path');
+const { error } = require('console');
 
 /**
-  * @description variable is declared to store array in stateArray 
-  * @const stateArray
-*/
+ * @description variable is declared to store array in stateArray 
+ * @const stateArray
+ */
 var stateArray = [];
 
 /**
-  * @description Class CensusAnalyser
-  * @class CensusAnalyser
-*/
+ * @description Class CensusAnalyser
+ * @class CensusAnalyser
+ */
 class CensusAnalyser {
-  /**
-   * Load the data from the provided file 
-   * @param {*} csvFile
-   * @returns callback with the data in an array in JSON format
-   */
-  loadCsvData(path, callback) {
-    let count = 0;
-    fs.createReadStream(path)
-      .pipe(csv())
-      .on(("data"), () => {
-        count += 1;
-      })
-      .on(("data"), (row) => {
-        stateArray.push(row);
-      })
-      .on("end", () => {
-        return callback(count);
+  constructor() {
+  }
+  loadCsvData(Path, callback) {
+    fs.createReadStream(Path)
+      .pipe(csv({}))
+      .on('data', (data) => stateArray.push(data))
+      .on('end', () => {
+        return callback(null, stateArray)
       });
+  };
+
+  swap(array, j) {
+    let temp;
+    temp = array[j];
+    array[j] = array[j + 1];
+    array[j + 1] = temp;
   }
 
-  /**
-      * Take data array and a field and sort state data 
-      * @returns callback with the data in an array in JSON format
-      */
-  sortByState(path, callback) {
-    this.loadCsvData(path, () => {
-      csvtojson().fromFile(path).then(stateArray => {
-        stateArray.sort((a, b) => {
-          let x = a.State.toLowerCase();
-          let y = b.State.toLowerCase();
-          if (x < y) { return -1; }
-        })
-        callback(stateArray[1].State)
-      });
-    });
+  sortingData(array, type) {
+    for (let i = 0; i < array.length - 1; i++) {
+      for (let j = 0; j < array.length - 1; j++) {
+        if (type == 'State')
+          if (parseInt(array[j].State) > parseInt(array[j + 1].State))
+            this.swap(array, j);
+        if (type == 'Population')
+          if (parseInt(array[j].Population) > parseInt(array[j + 1].Population))
+            this.swap(array, j);
+        if (type == 'AreaInSqKm')
+          if (parseInt(array[j].AreaInSqKm) > parseInt(array[j + 1].AreaInSqKm))
+            this.swap(array, j);
+        if (type == 'DensityPerSqKm')
+          if (parseInt(array[j].DensityPerSqKm) > parseInt(array[j + 1].DensityPerSqKm))
+            this.swap(array, j);
+      }
+    }
+    return array;
   }
 
-  /**
-      * Take data array and a field to sort by statecode  
-      * @returns callback with the data in an array in JSON format
-      */
-  sortByStateCode(path, callback) {
-    this.loadCsvData(path, () => {
-      csvtojson().fromFile(path).then(stateArray => {
-        var stateCode = stateArray.sort((a, b) => a.StateCode - b.StateCode)
-        return callback(stateCode);
-      });
-    });
+  maxResult(array, type, base) {
+    const result = this.sortingData(array, type);
+    if (base == 'State')
+      return result[result.length - 1].State
   }
 
-  /**
-      * Take data array and a field to sort by Population
-      * @returns callback with the data in an array in JSON format
-      */
-  sortByPopulation(path, callback) {
-    this.loadCsvData(path, () => {
-      csvtojson().fromFile(path).then(stateArray => {
-        var population = stateArray.sort((a, b) => a.Population - b.Population);
-        return callback(population);
-      });
-    });
-  }
-
-  /**
-        * Take data array and a field to sort by Population Density
-        * @returns callback with the data in an array in JSON format
-        */
-  sortByPopulationDensity(path, callback) {
-    this.loadCsvData(path, () => {
-      csvtojson().fromFile(path).then(stateArray => {
-        var populationDensity = stateArray.sort((a, b) => a.Population - b.Population);
-        return callback(populationDensity);
-      });
-    });
-  }
-
-  /**
-        * Take data array and a field to sort by area
-        * @returns callback with the data in an array in JSON format
-        */
-  sortByArea(path, callback) {
-    this.loadCsvData(path, () => {
-      csvtojson().fromFile(path).then(stateArray => {
-        var area = stateArray.sort((a, b) => a.AreaInSqKm - b.AreaInSqKm);
-        return callback(area);
-      });
-    });
+  minResult(array, type, base) {
+    const result = this.sortingData(array, type, base);
+    if (base == 'State')
+      return result[0].State
   }
 }
 

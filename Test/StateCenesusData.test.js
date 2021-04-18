@@ -1,91 +1,83 @@
 const assert = require("chai").assert;
-const censusAnalyser = require("../Src/StateCensusData");
+const CensusAnalyser = require("../Src/StateCensusData.js");
 const STATE_CENSUS_FILE_PATH = './resources/StateCensusData.csv';
-const STATE_CODE_FILE_PATH = './resources/StateCode.csv';
-const US_CENSUS_FILE_PATH = "./resources/USCensusData.csv";
 
-var CensusAnalyser = new censusAnalyser();
-
-describe("IndiaStateCensusAnalyser", () => {
-  it("GivenIndianCensusData_whenLoadsTheNumberOfRecords_ShouldReturnTrue", () => {
-    CensusAnalyser.loadCsvData(STATE_CENSUS_FILE_PATH, (row) => {
-      assert.equal(row, 29);
+describe('Indian Census Analyser', () => {
+  const obj = new CensusAnalyser();
+  var array = [];
+  before(function (callback) {
+    obj.loadCsvData(STATE_CENSUS_FILE_PATH, (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        callback()
+        array = result;
+        // console.log(array.length)
+      }
     });
   });
 
-  it("GivenIndianCensusData_WhenWrongDataGiven_ShouldReturnFalse", () => {
-    CensusAnalyser.loadCsvData(STATE_CENSUS_FILE_PATH, (row) => {
-      assert.notEqual(row, 39);
-    });
+  it('GivenIndianCensusData_whenLoadsTheNumberOfRecords_ShouldReturnTrue', () => {
+    assert.equal(array.length, 29);
   });
 
-  it("GivenIndiaCensusData_WhenSortedOnState_ShouldReturnSortedData", () => {
-    CensusAnalyser.sortByState(STATE_CENSUS_FILE_PATH, (sorted) => {
-      assert.equal(sorted, "Andhra Pradesh");
-    });
+  it('GivenIndianCensusData_WhenWrongDataGiven_ShouldReturnFalse', () => {
+    assert.notEqual(array.length, 39);
+  })
+
+  it('GivenIndiaCensusData_WhenSortedMaxOnState_ShouldReturnSortedState', () => {
+    var type = 'State'
+    var base = 'State'
+    const state = obj.maxResult(array, type, base);
+    assert.equal(state, "Sikkim");
   });
 
-  it("GivenIndiaCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
-    CensusAnalyser.sortByPopulation(STATE_CENSUS_FILE_PATH, (population) => {
-      assert.equal(population, "Uttar Pradesh");
-    });
+  it('GivenIndiaCensusData_WhenSortedLeastOnState_ShouldReturnSortedState', () => {
+    var type = 'State'
+    var base = 'State'
+    const state = obj.minResult(array, type, base);
+    assert.equal(state, "Uttar Pradesh");
   });
 
-  it("GivenIndiaCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
-    CensusAnalyser.sortByPopulationDensity(STATE_CENSUS_FILE_PATH, (populationDensity) => {
-      assert.equal(populationDensity, "Uttar Pradesh");
-    });
+  it('GivenIndiaCensusData_WhenSortedOnMorePopulationDensity_ShouldReturnSortedData', () => {
+    var type = 'Population'
+    var base = 'State'
+    const state = obj.maxResult(array, type, base);
+    assert.equal(state, 'Uttar Pradesh');
   });
 
-  it("GivenIndiaCensusData_WhenSortedOnArea_ShouldReturnSortedData", () => {
-    CensusAnalyser.sortByArea(STATE_CENSUS_FILE_PATH, (data) => {
-      assert.equal(data, "Rajasthan");
-    });
-  });
-});
-
-describe("IndiaStateCodeAnalyser", () => {
-  it("GivenIndianStateCode_whenLoadsTheNumberOfRecords_ShouldReturnTrue", () => {
-    CensusAnalyser.loadCsvData(STATE_CODE_FILE_PATH, (row) => {
-      assert.equal(row, 37);
-    });
+  it('GivenIndiaCensusData_WhenSortedOnLeastPopulationDensity_ShouldReturnSortedData', () => {
+    var type = 'Population'
+    var base = 'State'
+    const state = obj.minResult(array, type, base);
+    assert.equal(state, 'Sikkim');
   });
 
-  it("GivenIndianStateCode_WhenWrongDataGiven_ShouldReturnFalse", () => {
-    CensusAnalyser.loadCsvData(STATE_CODE_FILE_PATH, (row) => {
-      assert.notEqual(row, 30);
-    });
+  it('GivenIndiaCensusData_WhenSortedOnMoreAreaInSqKm_ShouldReturnSortedData', () => {
+    var type = 'AreaInSqKm'
+    var base = 'State'
+    const state = obj.maxResult(array, type, base);
+    assert.equal(state, 'Rajasthan');
   });
 
-  it("GivenIndiaStateCodeFile_WhenSortedByStateCode_ShouldReturnEqual", () => {
-    CensusAnalyser.sortByStateCode(STATE_CODE_FILE_PATH, () => {
-      assert.equal(data, "AN");
-    });
+  it('GivenIndiaCensusData_WhenSortedOnLeastAreaSqKm_ShouldReturnSortedData', () => {
+    var type = 'AreaInSqKm'
+    var base = 'State'
+    const state = obj.minResult(array, type, base);
+    assert.equal(state, 'Sikkim');
   });
-});
-
-describe("USCensusAnalyser", () => {
-  it("GivenUSCensusData_whenLoadsTheNumberOfRecords_ShouldReturnTrue", () => {
-    CensusAnalyser.loadCsvData(US_CENSUS_FILE_PATH, (row) => {
-      assert.equal(row, 51);
-    });
-  });
-
-  it("givenUSCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
-    CensusAnalyser.sortByPopulation(US_CENSUS_FILE_PATH, (population) => {
-      assert.equal(population, "California");
-    });
+  
+  it('GivenIndiaCensusData_WhenSortedOnMaxDensityPerSqKm_ShouldReturnSortedData', () => {
+    var type = 'DensityPerSqKm'
+    var base = 'State'
+    const state = obj.maxResult(array, type, base);
+    assert.equal(state, 'Bihar');
   });
 
-  it("givenUSCensusData_WhenSortedOnPopulation_ShouldReturnSortedData", () => {
-    CensusAnalyser.sortByPopulationDensity(US_CENSUS_FILE_PATH, (population) => {
-      assert.equal(population, "District of Columbia");
-    });
-  });
-
-  it("givenUSCensusData_WhenSortedOnArea_ShouldReturnEqual", () => {
-    CensusAnalyser.sortByArea(US_CENSUS_FILE_PATH, (area) => {
-      assert.equal(area, "Alaska");
-    });
+  it('GivenIndiaCensusData_WhenSortedOnLeastDenityPerSqKm_ShouldReturnSortedData', () => {
+    var type = 'DensityPerSqKm'
+    var base = 'State'
+    const state = obj.minResult(array, type, base);
+    assert.equal(state, 'Mizoram');
   });
 });
